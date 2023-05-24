@@ -1,13 +1,18 @@
 import random
 import threading
 import time
-
+import serial
+import aprslib
 import dash
 from dash import html, dcc
 import dash_leaflet as dl
 from dash_extensions.javascript import assign
 
 from dash.dependencies import Input, Output
+
+CALLSIGN = 'SR0FLY'
+PORT = 'COM2'
+
 
 positions = []
 semaphore = threading.Semaphore(1)
@@ -85,11 +90,20 @@ def update_map(n):
 
 
 def thread_function():
-    for i in range(50):
-        time.sleep(10)
-        lat = random.uniform(53, 54)
-        lon = random.uniform(18, 19)
-
+    while(True):
+        ser = serial.Serial()
+        ser.baudrate = 9600
+        ser.port = PORT
+        ser.open()
+        message = str(ser.readline())
+        start = message.find("PID=F0")+7
+        if(message[start:].find(CALLSIGN) != -1):
+            continue
+        frame = CALLSIGN + ">NOCALL:" + message[start:]
+        frame = aprslib.parse(frame)
+        print(str(frame['latitude']) + " " + str(frame['longitude']))
+        lat = frame['latitude']
+        lon = frame['longitude']
         # Create a marker with the generated coordinates
         semaphore.acquire()
         positions.append([lat, lon])
