@@ -1,4 +1,5 @@
 <h1 align="center">Welcome to SimLE Tracking App</h1>
+<img src="https://github.com/Kambion/SimLE-Tracking-App/blob/main/SimLE%20Stardust.png" />
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">
